@@ -11,7 +11,7 @@
     ></membership-card>
     <div class="relative-position print-as-page">
       <img src="statics/membership/membership_reverse.png" class="fit" alt="">
-      <div class="absolute q-pa-sm bg-white rounded-borders" style="top: 8%; left: 64%">
+      <div class="absolute q-pa-sm bg-white rounded-borders" style="top: 5%; left: 65%">
         <qr-code :value="page.membership_id" :size="80" level="L"></qr-code>
       </div>
     </div>

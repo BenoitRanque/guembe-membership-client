@@ -79,7 +79,7 @@
       </q-card>
     </q-dialog>
     <!-- TODO: cannot calculate name width properly with this class active. -->
-    <div class="print-only">
+    <div class="print-visible">
       <component
         :is="printingTemplateName"
         v-for="(page, index) in pages"
@@ -198,6 +198,9 @@ export default {
 </script>
 
 <style lang="stylus">
+.print-visible
+  visibility hidden
+
 @media print
   // Hide other elements
   body > :not(#q-app),
@@ -205,9 +208,11 @@ export default {
     display none
 
   // quasar sets body postion to fixed when modal open. override for printing
-  body
-    position relative
+  body.q-body--prevent-scroll
+    position relative !important
 
+  .print-visible
+    visibility visible
   // page breaks for multi page printing
   .print-as-page
     page-break-after always

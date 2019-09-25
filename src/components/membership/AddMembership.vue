@@ -1,7 +1,7 @@
 <template>
   <q-stepper v-model="step" vertical>
     <q-step :name="0" title="Detalles">
-      <q-input filled label="Nombre Completo" v-model="membership.fullname"></q-input>
+      <q-input filled label="Nombre Completo" v-model="membership.name"></q-input>
       <q-input filled label="Documento de identidad" v-model="membership.document"></q-input>
       <input type="file" class="q-btn">
       <q-btn @click="step += 1">Next</q-btn>
@@ -67,7 +67,7 @@ export default {
       membership: {
         membership_id: '666d39ca-dc3d-11e9-8a34-2a2ae2dbcce4',
         background: 'statics/membership/membership_individual.png',
-        name: 'Ranque Loiseleur Benoit Yves Patrick',
+        name: 'Ranque Loiseleur \n Benoit Yves Patrick',
         document: '13513808 SC',
         image: null,
         validFrom: '2019-01-01',

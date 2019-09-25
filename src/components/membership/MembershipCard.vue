@@ -5,6 +5,7 @@
     <text x="0" y="180" font-size="28" style="font-weight: 500">
       <tspan ref="lineBreakpointTestNode" fill="transparent" dy="-1em" dx="20" x="0"></tspan>
       <tspan v-for="(line, index) in nameLines" :key="index" dy="1.1em" dx="20" x="0">{{line}}</tspan>
+      <!-- <tspan v-for="(line, index) in nameLines" :key="index" dy="1.1em" dx="20" x="0">{{line}}</tspan> -->
       <tspan fill="grey" font-size="24" style="font-weight: 400" dy="1.2em" dx="20" x="0">{{document}}</tspan>
     </text>
     <text x="0" y="284" font-size="10">
@@ -65,6 +66,11 @@ export default {
       lineBreakpointTestNode: null
     }
   },
+  methods: {
+    displayDate (date) {
+      return date ? formatDate(extractDate(date, 'YYYY-MM-DD'), 'YYYY/DD/MM') : ''
+    }
+  },
   computed: {
     nameLines () {
       if (!this.lineBreakpointTestNode) {
@@ -96,11 +102,6 @@ export default {
           }
           return lines
         }, [])
-    }
-  },
-  methods: {
-    displayDate (date) {
-      return date ? formatDate(extractDate(date, 'YYYY-MM-DD'), 'YYYY/DD/MM') : ''
     }
   },
   mounted () {
