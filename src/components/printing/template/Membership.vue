@@ -1,5 +1,5 @@
 <template>
-  <div style="font-size: 0; width: 300px">
+  <div style="font-size: 0;">
     <membership-card
       class="print-as-page"
       :image="page.image"
@@ -9,23 +9,21 @@
       :valid-from="page.validFrom"
       :valid-to="page.validTo"
     ></membership-card>
-    <div class="relative-position print-as-page">
-      <img src="statics/membership/membership_reverse.png" class="fit" alt="">
-      <div class="absolute q-pa-sm bg-white rounded-borders" style="top: 5%; left: 65%">
-        <qr-code :value="page.membership_id" :size="80" level="L"></qr-code>
-      </div>
-    </div>
+    <membership-card-reverse
+      class="print-as-page"
+      :code="page.membership_id"
+    ></membership-card-reverse>
   </div>
 </template>
 
 <script>
 import MembershipCard from 'components/membership/MembershipCard'
-import QrCode from 'qrcode.vue'
+import MembershipCardReverse from 'components/membership/MembershipCardReverse'
 export default {
   name: 'MembershipPrintingTemplate',
   components: {
     MembershipCard,
-    QrCode
+    MembershipCardReverse
   },
   props: ['page']
 }

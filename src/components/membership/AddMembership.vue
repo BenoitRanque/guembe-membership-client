@@ -42,7 +42,10 @@
         :valid-from="membership.validFrom"
         :valid-to="membership.validTo"
       ></membership-card>
-      <q-btn @click="$root.$emit('PRINT', { preview: true, template: 'membership', pages: [ membership, membership, membership ] })">Print</q-btn>
+      <membership-card-reverse
+        :code="membership.membership_id"
+      ></membership-card-reverse>
+      <q-btn @click="$root.$emit('PRINT', { preview: true, template: 'membership', pages: [ membership ] })">Print</q-btn>
     </q-step>
     <template #navigation>
       <q-btn @click="step -= 1">previous</q-btn>
@@ -56,9 +59,10 @@ import CaptureImage from './CaptureImage'
 import UploadImage from './UploadImage'
 import CropImage from './CropImage'
 import MembershipCard from './MembershipCard'
+import MembershipCardReverse from './MembershipCardReverse'
 export default {
   name: 'AddMembership',
-  components: { CaptureImage, CropImage, UploadImage, MembershipCard },
+  components: { CaptureImage, CropImage, UploadImage, MembershipCard, MembershipCardReverse },
   data () {
     return {
       step: 0,
@@ -67,7 +71,7 @@ export default {
       membership: {
         membership_id: '666d39ca-dc3d-11e9-8a34-2a2ae2dbcce4',
         background: 'statics/membership/membership_individual.png',
-        name: 'Ranque Loiseleur \n Benoit Yves Patrick',
+        name: 'Benoit Yves Patrick Ranque Loiseleur',
         document: '13513808 SC',
         image: null,
         validFrom: '2019-01-01',

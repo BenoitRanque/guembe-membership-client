@@ -1,27 +1,24 @@
 <template>
-  <svg width="100%" height="100%" viewBox="0, 0, 508 , 319" preserveAspectRation="xMinYMin meet">
-    <image x="0" y="0" width="508" height="319" :href="background"></image>
+  <svg width="100%" height="100%" viewBox="0, 0, 500, 318.5" preserveAspectRation="xMinYMin meet">
+    <image x="-3" y="0" height="100%" :href="background"></image>
     <image x="20" y="20" width="130" height="130" :href="image"></image>
-    <text x="0" y="180" font-size="28" style="font-weight: 500">
+    <text x="0" y="180" font-size="26" style="font-weight: 600">
       <tspan ref="lineBreakpointTestNode" fill="transparent" dy="-1em" dx="20" x="0"></tspan>
       <tspan v-for="(line, index) in nameLines" :key="index" dy="1.1em" dx="20" x="0">{{line}}</tspan>
       <!-- <tspan v-for="(line, index) in nameLines" :key="index" dy="1.1em" dx="20" x="0">{{line}}</tspan> -->
-      <tspan fill="grey" font-size="24" style="font-weight: 400" dy="1.2em" dx="20" x="0">{{document}}</tspan>
+      <tspan fill="grey" font-size="22" style="font-weight: 500" dy="1.2em" dx="20" x="0">{{document}}</tspan>
     </text>
-    <text x="0" y="284" font-size="10">
+    <text x="0" y="284" font-size="10" font-weight="600">
       <tspan dx="24" x="0">
-        PERIODO
+        VALIDO
       </tspan>
-      <tspan dy="1.1em" dx="24" x="0">
-        VIGENCIA
+      <tspan dy="1em" dx="24" x="0">
+        HASTA
       </tspan>
     </text>
-    <text x="0" y="284" font-size="10">
-      <tspan dx="80" x="0">
+    <text x="0" y="292" font-size="20" font-weight="500">
+      <tspan dx="66" x="0">
         {{displayDate(validFrom)}}
-      </tspan>
-      <tspan dy="1.1em" dx="80" x="0">
-        {{displayDate(validTo)}}
       </tspan>
     </text>
   </svg>
@@ -68,7 +65,7 @@ export default {
   },
   methods: {
     displayDate (date) {
-      return date ? formatDate(extractDate(date, 'YYYY-MM-DD'), 'YYYY/DD/MM') : ''
+      return date ? formatDate(extractDate(date, 'YYYY-MM-DD'), 'MM/YYYY') : ''
     }
   },
   computed: {
@@ -77,7 +74,7 @@ export default {
         return []
       }
 
-      const BREAKPOINT = 256
+      const BREAKPOINT = 220
       const node = this.lineBreakpointTestNode
 
       node.innerHTML = ''
