@@ -16,7 +16,7 @@
       <q-btn :disable="!device" class="q-mr-xs" round color="secondary" dense @click="toggle" :icon="stream ? 'mdi-camera-off' : 'mdi-camera'">
         <q-tooltip>Encenter/apagar camara</q-tooltip>
       </q-btn>
-      <q-select :disable="!devices.length" dense standout dark :options="devices" v-model="device"></q-select>
+      <q-select :disable="!devices.length" dense standout dark bg-color="primary" :options="devices" v-model="device"></q-select>
       <q-space></q-space>
       <q-btn @click="capture" :disable="!stream" size="lg" dense round color="primary" icon="mdi-camera-iris">
         <q-tooltip>

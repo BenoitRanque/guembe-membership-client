@@ -1,15 +1,15 @@
 <template>
-  <div class="relative-position">
-    <img ref="image" :src="image" alt="">
-    <q-toolbar class="absolute-bottom q-pb-sm justify-center">
-      <!-- <q-btn round color="secondary" icon="mdi-camera-retake"></q-btn>
-      <q-space></q-space> -->
-      <q-btn @click="confirm" size="lg" round color="primary" icon="mdi-crop">
-        <q-tooltip>
-          Confirmar Recorte
-        </q-tooltip>
-      </q-btn>
-    </q-toolbar>
+  <div class="relative-position" style="font-size: 0; overflow: hidden;">
+    <img class="full-width" ref="image" :src="image" alt="">
+
+    <q-sticky>
+
+    </q-sticky>
+    <q-btn class="absolute-bottom q-mb-sm" style="left: 50%; transform: translateX(-50%)" @click="confirm" size="lg" round color="primary" icon="mdi-crop">
+      <q-tooltip>
+        Confirmar Recorte
+      </q-tooltip>
+    </q-btn>
   </div>
 </template>
 

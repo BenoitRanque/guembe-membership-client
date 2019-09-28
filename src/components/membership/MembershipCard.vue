@@ -18,7 +18,7 @@
     </text>
     <text x="0" y="292" font-size="20" font-weight="500">
       <tspan dx="66" x="0">
-        {{displayDate(validFrom)}}
+        {{displayDate(validTo)}}
       </tspan>
     </text>
   </svg>
@@ -45,10 +45,6 @@ export default {
     document: {
       type: String,
       default: ''
-    },
-    validFrom: {
-      type: String,
-      default: null
     },
     validTo: {
       type: String,
