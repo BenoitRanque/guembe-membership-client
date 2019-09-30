@@ -179,7 +179,7 @@ export default {
     addMembership () {
       this.memberships.push({
         type_id: 'INDIVIDUAL',
-        name: '',
+        name:  this.memberships.length === 0 && !this.clientSelect ? this.client.name : '',
         document: '',
         image: null
       })
