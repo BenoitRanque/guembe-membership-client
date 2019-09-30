@@ -30,7 +30,7 @@
 
           <q-space />
 
-          <q-btn dense flat icon="mdi-close" v-close-popup>
+          <q-btn dense flat icon="mdi-close" @click="confirmCancel">
             <q-tooltip>Cerrar</q-tooltip>
           </q-btn>
         </q-bar>
@@ -127,6 +127,18 @@ export default {
     }
   },
   methods: {
+    confirmCancel () {
+      this.$q.dialog({
+        title: 'Salir sin imprimir?',
+        message: 'Confirmar que desea salir sin imprimir',
+        cancel: true,
+        ok: {
+          color: 'negative'
+        }
+      }).onOk(() => {
+        this.preview.show = false
+      })
+    },
     requestPrint (params) {
       // set configuration
       this.config.silent = params.silent ? params.silent : false

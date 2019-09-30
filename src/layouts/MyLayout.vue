@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -10,12 +10,49 @@
           icon="mdi-menu"
           aria-label="Menu"
         />
-
         <q-toolbar-title>
-          Quasar App
+          Sistema de control de membresias
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn
+          flat
+          dense
+          round
+          icon="mdi-home"
+          @click="$router.push('/')"
+        ></q-btn>
+        <template v-if="isAuthenticated">
+          <q-btn-dropdown
+            v-model="showUserSessionDropdown"
+            flat stretch
+            auto-close
+            label="Session Iniciada"
+          >
+            <q-list>
+              <q-item clickable @click="showUserPasswordDialog = true">
+                <q-item-section side>
+                  <q-icon name="mdi-lock-reset"></q-icon>
+                </q-item-section>
+                <q-item-section>
+                  Cambiar Contraseña
+                </q-item-section>
+              </q-item>
+              <q-separator></q-separator>
+              <q-item clickable @click="logout">
+                <q-item-section side>
+                  <q-icon name="mdi-logout"></q-icon>
+                </q-item-section>
+                <q-item-section>
+                  Cerrar Session
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </template>
+        <template v-else>
+          <q-btn-dropdown flat stretch label="Iniciar Session" v-model="showLoginDropdown">
+            <user-authentication></user-authentication>
+          </q-btn-dropdown>
+        </template>
       </q-toolbar>
     </q-header>
 
@@ -26,59 +63,14 @@
       content-class="bg-grey-2"
     >
       <q-list>
-        <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
+        <q-item-label header>Modulos</q-item-label>
+        <q-item clickable to="/membership" v-if="isAuthorized(['membership_view', 'membership_print', 'membership_use'])">
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-avatar icon="mdi-account-card-details-outline"></q-avatar>
           </q-item-section>
           <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://github.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="code" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Github</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://chat.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
-            <q-item-label caption>chat.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://forum.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="record_voice_over" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Forum</q-item-label>
-            <q-item-label caption>forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://twitter.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="rss_feed" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Twitter</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://facebook.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Facebook</q-item-label>
-            <q-item-label caption>@QuasarFramework</q-item-label>
+            <q-item-label>Membresias</q-item-label>
+            <q-item-label caption>Administrar membresias</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -87,16 +79,47 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-dialog v-model="showLoginDialog">
+      <user-authentication></user-authentication>
+    </q-dialog>
+
+    <q-dialog v-model="showUserPasswordDialog">
+      <user-password @done="showUserPasswordDialog = false"></user-password>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script>
+import UserAuthentication from 'components/UserAuthentication'
+import UserPassword from 'components/UserPassword'
+
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'MyLayout',
-
+  components: { UserAuthentication, UserPassword },
   data () {
     return {
-      leftDrawerOpen: false
+      leftDrawerOpen: true,
+      showLoginDropdown: false,
+      showUserSessionDropdown: false,
+      showLoginDialog: false,
+      showUserPasswordDialog: false
+    }
+  },
+  computed: {
+    ...mapGetters('auth', ['isAuthenticated', 'isAuthorized'])
+  },
+  methods: {
+    ...mapActions('auth', ['LOGOUT']),
+    async logout () {
+      try {
+        await this.LOGOUT()
+        this.$q.notify({ icon: 'mdi-check', color: 'positive', message: 'Session cerrada' })
+        this.$router.push('/')
+      } catch (error) {
+        this.$gql.handleError(error)
+      }
     }
   }
 }
