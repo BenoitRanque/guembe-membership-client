@@ -136,6 +136,26 @@ import CaptureImage from './CaptureImage'
 import UploadImage from './UploadImage'
 import CropImage from './CropImage'
 import MembershipCard from './MembershipCard'
+const membershipTypes = [
+  {
+    label: 'Membresia Individual',
+    background: 'membership_individual.png',
+    value: 'INDIVIDUAL',
+    type_id: 'INDIVIDUAL'
+  },
+  {
+    label: 'Membresia Duo',
+    background: 'membership_duo.png',
+    value: 'DUO',
+    type_id: 'DUO'
+  },
+  {
+    label: 'Membresia Familiar',
+    background: 'membership_family.png',
+    value: 'FAMILY',
+    type_id: 'FAMILY'
+  }
+]
 export default {
   name: 'AddMembership',
   components: { CaptureImage, CropImage, UploadImage, MembershipCard },
@@ -161,28 +181,7 @@ export default {
       showUploadImageDialog: false,
       showCropImageDialog: false,
       rawImage: null,
-      membershipTypes: [
-        {
-          label: 'Membresia Individual',
-          background: 'membership_individual.png',
-          value: 'INDIVIDUAL',
-          type_id: 'INDIVIDUAL'
-        },
-        {
-          label: 'Membresia Duo',
-          background: 'membership_duo.png',
-          value: 'DUO',
-          type_id: 'DUO'
-        },
-        {
-          label: 'Membresia Familiar',
-          background: 'membership_family.png',
-          value: 'FAMILY',
-          type_id: 'FAMILY'
-        }
-      ],
       membership: {
-        membership_id: '666d39ca-dc3d-11e9-8a34-2a2ae2dbcce4',
         type_id: 'INDIVIDUAL',
         name: '',
         document: '',
@@ -194,14 +193,14 @@ export default {
     membershipType: {
       get () {
         if (!this.value.type_id) return null
-        return this.membershipTypes.find(type => type.type_id === this.value.type_id)
+        return membershipTypes.find(type => type.type_id === this.value.type_id)
       },
       set (value) {
         this.update('type_id', value.type_id)
       }
     },
     background () {
-      return `statics/membership/${this.membershipType ? this.membershipType.background : this.membershipTypes[0].background}`
+      return `statics/membership/${this.membershipType ? this.membershipType.background : membershipTypes[0].background}`
     }
   },
   methods: {
