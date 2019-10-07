@@ -9,6 +9,20 @@ export function userId (state, { isAuthenticated }) {
   return state.session.user_id
 }
 
+export function username (state, { isAuthenticated }) {
+  if (!isAuthenticated) {
+    return null
+  }
+  return state.session.username
+}
+
+export function name (state, { isAuthenticated }) {
+  if (!isAuthenticated) {
+    return null
+  }
+  return state.session.name
+}
+
 export function isAuthorized (state, { isAuthenticated }) {
   return roles => {
     if (!isAuthenticated) {

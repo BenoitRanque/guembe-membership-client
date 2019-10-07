@@ -92,7 +92,7 @@
             </div>
           </div>
           <q-separator></q-separator>
-          <div class="text-center q-pa-md">
+          <div class="text-center q-pa-md" v-if="isAuthorized('membership_use')">
             <q-btn color="primary" rounded :disable="!selected.length" @click="confirmRegisterUse">Registrar uso de {{selected.length}} Membresias</q-btn>
           </div>
           <q-inner-loading :showing="loading">
@@ -162,8 +162,10 @@ export default {
       memberships: []
     }
   },
+  computed: {
+    ...mapGetters('auth', ['isAuthorized'])
+  },
   methods: {
-    ...mapGetters('auth', ['isAuthorized']),
     isValid ({ start_date, end_date }) {
       return isBetweenDates(new Date(), extractDate(start_date, 'YYYY-MM-DD'), extractDate(end_date, 'YYYY-MM-DD'))
     },

@@ -28,6 +28,15 @@
             label="Session Iniciada"
           >
             <q-list>
+              <q-item>
+                <q-item-section side>
+                  <q-icon name="mdi-account-box-outline"></q-icon>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{username}}</q-item-label>
+                  <q-item-label caption>{{name}}</q-item-label>
+                </q-item-section>
+              </q-item>
               <q-item clickable @click="showUserPasswordDialog = true">
                 <q-item-section side>
                   <q-icon name="mdi-lock-reset"></q-icon>
@@ -73,6 +82,24 @@
             <q-item-label caption>Administrar membresias</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item clickable to="/users" v-if="isAuthorized(['administrator'])">
+          <q-item-section avatar>
+            <q-avatar icon="mdi-account-supervisor"></q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Usuarios</q-item-label>
+            <q-item-label caption>Administrar usuarios</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable to="/bracelets" v-if="isAuthorized(['administrator'])">
+          <q-item-section avatar>
+            <q-avatar icon="mdi-account-supervisor-box-outline"></q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Usuarios</q-item-label>
+            <q-item-label caption>Administrar usuarios</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -108,7 +135,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['isAuthenticated', 'isAuthorized'])
+    ...mapGetters('auth', ['isAuthenticated', 'isAuthorized', 'name', 'username'])
   },
   methods: {
     ...mapActions('auth', ['LOGOUT']),
@@ -116,9 +143,10 @@ export default {
       try {
         await this.LOGOUT()
         this.$q.notify({ icon: 'mdi-check', color: 'positive', message: 'Session cerrada' })
-        this.$router.push('/')
       } catch (error) {
         this.$gql.handleError(error)
+      } finally {
+        this.$router.push('/')
       }
     }
   }
