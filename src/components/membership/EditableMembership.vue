@@ -15,19 +15,19 @@
       Haz click derecho para modificar
     </q-tooltip>
     <q-menu context-menu>
-      <q-list>
+      <q-list dense>
         <q-item clickable v-ripple v-close-popup @click="showEditMembershipDialog = true">
-          <q-item-section avatar>
-            <q-avatar rounded color="primary" text-color="white" icon="mdi-pencil" />
-          </q-item-section>
           <q-item-section>Editar</q-item-section>
+          <q-item-section side>
+            <q-icon name="mdi-pencil"></q-icon>
+          </q-item-section>
         </q-item>
         <q-separator></q-separator>
         <q-item clickable v-ripple v-close-popup @click="remove">
-          <q-item-section avatar>
-            <q-avatar rounded color="negative" text-color="white" icon="mdi-delete" />
-          </q-item-section>
           <q-item-section>Eliminar</q-item-section>
+          <q-item-section side>
+            <q-icon name="mdi-delete"></q-icon>
+          </q-item-section>
         </q-item>
       </q-list>
     </q-menu>
@@ -157,7 +157,7 @@ const membershipTypes = [
   }
 ]
 export default {
-  name: 'AddMembership',
+  name: 'EditableMembership',
   components: { CaptureImage, CropImage, UploadImage, MembershipCard },
   props: {
     validTo: {
@@ -175,6 +175,7 @@ export default {
   },
   data () {
     return {
+      membershipTypes,
       showEditMembershipDialog: false,
       showAddImageDialog: false,
       showCaptureImageDialog: false,

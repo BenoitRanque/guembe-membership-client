@@ -76,11 +76,14 @@ export async function LOGOUT ({ commit, state }) {
       session_logout
     }
   `
+  try {
+    await gql({ query })
+  } catch (error) {
+    throw error
+  } finally {
+    commit('AUTH')
 
-  await gql({ query })
-
-  commit('AUTH')
-
-  clearTimeout(state.refreshTask)
-  commit('REFRESH_TOKEN_TASK')
+    clearTimeout(state.refreshTask)
+    commit('REFRESH_TOKEN_TASK')
+  }
 }
