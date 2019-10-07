@@ -73,15 +73,6 @@
     >
       <q-list>
         <q-item-label header>Modulos</q-item-label>
-        <q-item clickable to="/membership" v-if="isAuthorized(['membership_view', 'membership_print', 'membership_use'])">
-          <q-item-section avatar>
-            <q-avatar icon="mdi-account-card-details-outline"></q-avatar>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Membresias</q-item-label>
-            <q-item-label caption>Administrar membresias</q-item-label>
-          </q-item-section>
-        </q-item>
         <q-item clickable to="/users" v-if="isAuthorized(['administrator'])">
           <q-item-section avatar>
             <q-avatar icon="mdi-account-supervisor"></q-avatar>
@@ -91,15 +82,24 @@
             <q-item-label caption>Administrar usuarios</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable to="/bracelets" v-if="isAuthorized(['administrator'])">
+        <q-item clickable to="/membership" v-if="isAuthorized(['membership_view', 'membership_print', 'membership_use'])">
           <q-item-section avatar>
-            <q-avatar icon="mdi-account-supervisor-box-outline"></q-avatar>
+            <q-avatar icon="mdi-account-card-details-outline"></q-avatar>
           </q-item-section>
           <q-item-section>
-            <q-item-label>Usuarios</q-item-label>
-            <q-item-label caption>Administrar usuarios</q-item-label>
+            <q-item-label>Membresias</q-item-label>
+            <q-item-label caption>Administrar membresias</q-item-label>
           </q-item-section>
         </q-item>
+        <!-- <q-item clickable to="/bracelets" v-if="isAuthorized(['administrator'])">
+          <q-item-section avatar>
+            <q-avatar icon="mdi-qrcode"></q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Manillas</q-item-label>
+            <q-item-label caption>Administrar Manillas</q-item-label>
+          </q-item-section>
+        </q-item> -->
       </q-list>
     </q-drawer>
 
