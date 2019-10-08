@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <q-input dense label="Nombre de usuario" :value="value.username" @input="$event => update('username', $event)"></q-input>
     <q-input dense label="Nombre" :value="value.name" @input="$event => update('name', $event)"></q-input>
     <q-select dense toggle multiple :options="roleOptions" :value="value.user_roles" @input="$event => update('user_roles', $event)">

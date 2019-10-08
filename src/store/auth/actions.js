@@ -1,14 +1,14 @@
 import gql from 'src/gql'
-// import { date } from 'quasar'
-// const { subtractFromDate } = date
+import { date } from 'quasar'
+const { subtractFromDate } = date
 
-// function getRefreshDelay (token) {
-//   const body = token.split('.')[1]
+function getRefreshDelay (token) {
+  const body = token.split('.')[1]
 
-//   const payload = JSON.parse(atob(body))
+  const payload = JSON.parse(atob(body))
 
-//   return (subtractFromDate(new Date(payload.exp * 1000), { minutes: 3 }).getTime() - new Date().getTime())
-// }
+  return (subtractFromDate(new Date(payload.exp * 1000), { minutes: 3 }).getTime() - new Date().getTime())
+}
 export async function LOGIN ({ commit, dispatch }, { username, password }) {
   const query = /* GraphQL */`
     query ($username: String! $password: String!) {
@@ -57,8 +57,7 @@ export async function REFRESH_TOKEN ({ commit, dispatch }) {
 }
 
 export async function SCHEDULE_REFRESH ({ commit, dispatch, state }) {
-  // const delay = getRefreshDelay(state.token)
-  const delay = 1000
+  const delay = getRefreshDelay(state.token)
 
   const task = setTimeout(async () => {
     try {

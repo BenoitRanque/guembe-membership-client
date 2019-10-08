@@ -3,7 +3,7 @@ import { Notify } from 'quasar'
 import store from 'src/store'
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.202:6060/v1/graphql',
+  baseURL: `http://${process.env.DEV ? '192.168.0.202' : 'app.guembe.ti'}:6060/v1/graphql`,
   timeout: 5000,
   withCredentials: true
 })

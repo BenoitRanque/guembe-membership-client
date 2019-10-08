@@ -203,7 +203,7 @@ export default {
           updated: false,
           value: {
             ...value,
-            user_roles: value.user_roles.map(({ value, role: { label, name } }) => ({ value, label, name }))
+            user_roles: value.user_roles.map(({ value, role: { label, description } }) => ({ value, label, description }))
           }
         }))
         this.roleOptions = roleOptions

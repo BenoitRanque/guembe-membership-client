@@ -78,8 +78,8 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <!-- TODO: cannot calculate name width properly with this class active. -->
-    <div class="print-visible">
+    <!-- TODO: cannot calculate name width properly with class 'print-only' active. -->
+    <div class="print-visible" :class="{ 'print-only': config.template !== 'membership' }">
       <component
         :is="printingTemplateName"
         v-for="(page, index) in pages"
@@ -93,10 +93,11 @@
 <script>
 import DefaultPrintingTemplate from './template/Default'
 import MembershipPrintingTemplate from './template/Membership'
+import BraceletPrintingTemplate from './template/Bracelet'
 
 export default {
   name: 'Printing',
-  components: { MembershipPrintingTemplate, DefaultPrintingTemplate },
+  components: { MembershipPrintingTemplate, BraceletPrintingTemplate, DefaultPrintingTemplate },
   data () {
     return {
       printerOptions: {

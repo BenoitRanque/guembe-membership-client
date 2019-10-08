@@ -14,6 +14,7 @@
           Sistema de control de membresias
         </q-toolbar-title>
         <q-btn
+          v-if="$route.path !== '/'"
           flat
           dense
           round
@@ -91,7 +92,7 @@
             <q-item-label caption>Administrar membresias</q-item-label>
           </q-item-section>
         </q-item>
-        <!-- <q-item clickable to="/bracelets" v-if="isAuthorized(['administrator'])">
+        <q-item clickable to="/admittance/bracelets" v-if="isAuthorized(['administrator'])">
           <q-item-section avatar>
             <q-avatar icon="mdi-qrcode"></q-avatar>
           </q-item-section>
@@ -99,7 +100,7 @@
             <q-item-label>Manillas</q-item-label>
             <q-item-label caption>Administrar Manillas</q-item-label>
           </q-item-section>
-        </q-item> -->
+        </q-item>
       </q-list>
     </q-drawer>
 
