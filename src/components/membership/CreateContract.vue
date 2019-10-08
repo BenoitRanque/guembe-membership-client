@@ -242,6 +242,7 @@ export default {
               end_date
               cards {
                 card_id
+                type_id
                 name
                 document
                 image

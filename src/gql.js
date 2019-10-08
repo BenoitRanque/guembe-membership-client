@@ -40,10 +40,6 @@ class GraphQLError {
     this.query = query
     this.variables = variables
     this.errors = errors
-
-    if (process.env.DEV) {
-      console.error(this)
-    }
   }
 
   display () {

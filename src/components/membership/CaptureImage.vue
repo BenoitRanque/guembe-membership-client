@@ -77,23 +77,18 @@ export default {
     },
     onStarted (stream) {
       this.stream = stream
-      // console.log('On Started Event', stream)
     },
     onStopped (stream) {
       this.stream = null
-      // console.log('On Stopped Event', stream)
     },
     onError (error) {
-      console.error(error)
-      // console.log('On Error Event', error)
+      throw error
     },
     onCameras (devices) {
       this.devices = devices
-      // console.log('On Cameras Event', devices)
     },
     onCameraChange (deviceId) {
       this.device = this.devices.find(device => device.deviceId === deviceId)
-      // console.log('On Camera Change Event', deviceId)
     }
   }
 }

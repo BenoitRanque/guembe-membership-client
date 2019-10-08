@@ -92,7 +92,7 @@
             <q-item-label caption>Administrar membresias</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable to="/admittance/bracelets" v-if="isAuthorized(['administrator'])">
+        <q-item clickable to="/admittance/bracelets" v-if="isAuthorized(['admittance_bracelet_print', 'admittance_bracelet_view'])">
           <q-item-section avatar>
             <q-avatar icon="mdi-qrcode"></q-avatar>
           </q-item-section>
