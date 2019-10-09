@@ -45,7 +45,7 @@
               >
                 <membership-card
                   :image="props.row.image"
-                  :background="backgroundImage(props.row.type_id)"
+                  :type-id="props.row.type_id"
                   :name="props.row.name"
                   :document="props.row.document"
                   :valid-to="props.row.contract.end_date"
@@ -71,7 +71,7 @@
               >
                 <membership-card
                   :image="card.image"
-                  :background="backgroundImage(card.type_id)"
+                  :type-id="card.type_id"
                   :name="card.name"
                   :document="card.document"
                   :valid-to="card.contract.end_date"
@@ -113,27 +113,6 @@ const { extractDate, isBetweenDates, formatDate } = date
 
 const UUID_V4_REGEX = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
 
-const membershipTypes = [
-  {
-    label: 'Membresia Individual',
-    background: 'membership_individual.png',
-    value: 'INDIVIDUAL',
-    type_id: 'INDIVIDUAL'
-  },
-  {
-    label: 'Membresia Duo',
-    background: 'membership_duo.png',
-    value: 'DUO',
-    type_id: 'DUO'
-  },
-  {
-    label: 'Membresia Familiar',
-    background: 'membership_family.png',
-    value: 'FAMILY',
-    type_id: 'FAMILY'
-  }
-]
-
 export default {
   name: 'Membership',
   components: { CreateContract, MembershipCard },
@@ -168,9 +147,6 @@ export default {
   methods: {
     isValid ({ start_date, end_date }) {
       return isBetweenDates(new Date(), extractDate(start_date, 'YYYY-MM-DD'), extractDate(end_date, 'YYYY-MM-DD'))
-    },
-    backgroundImage (typeId) {
-      return `statics/membership/${membershipTypes.find(type => type.type_id === typeId).background}`
     },
     confirmRegisterUse () {
       this.$q.dialog({

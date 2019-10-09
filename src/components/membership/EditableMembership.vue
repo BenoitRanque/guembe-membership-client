@@ -3,7 +3,7 @@
     <membership-card
       @click.native="showEditMembershipDialog = true"
       :image="value.image"
-      :background="background"
+      :type-id="value.type_id ? value.type_id : 'INDIVIDUAL'"
       :name="value.name ? value.name : 'Nombre Apellido'"
       :document="value.document ? value.document : '00000000 SC'"
       :valid-to="validTo"
@@ -48,7 +48,7 @@
             <div class="relative-position" style="width: 460px; font-size: 0">
               <membership-card
                 :image="value.image"
-                :background="background"
+                :type-id="value.type_id ? value.type_id : 'INDIVIDUAL'"
                 :name="value.name"
                 :document="value.document"
                 :valid-to="validTo"
@@ -199,9 +199,6 @@ export default {
       set (value) {
         this.update('type_id', value.type_id)
       }
-    },
-    background () {
-      return `statics/membership/${this.membershipType ? this.membershipType.background : membershipTypes[0].background}`
     }
   },
   methods: {

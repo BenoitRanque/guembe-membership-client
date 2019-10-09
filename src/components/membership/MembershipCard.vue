@@ -28,13 +28,15 @@
 import { date } from 'quasar'
 const { formatDate, extractDate } = date
 
+const backgroundMap = {
+  'INDIVIDUAL': 'membership_individual.png',
+  'DUO': 'membership_duo.png',
+  'FAMILY': 'membership_family.png'
+}
+
 export default {
   name: 'MembershipCard',
   props: {
-    // print: {
-    //   type: Boolean,
-    //   default: false
-    // },
     image: {
       type: String
     },
@@ -50,7 +52,7 @@ export default {
       type: String,
       default: null
     },
-    background: {
+    typeId: {
       type: String
     }
   },
@@ -65,6 +67,9 @@ export default {
     }
   },
   computed: {
+    background () {
+      return `statics/membership/${backgroundMap[this.typeId]}`
+    },
     nameLines () {
       if (!this.lineBreakpointTestNode) {
         return []
