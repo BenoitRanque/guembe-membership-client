@@ -128,7 +128,7 @@ export default {
   components: { UserAuthentication, UserPassword },
   data () {
     return {
-      leftDrawerOpen: true,
+      leftDrawerOpen: this.$q.platform.is.desktop,
       showLoginDropdown: false,
       showUserSessionDropdown: false,
       showLoginDialog: false,
