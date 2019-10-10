@@ -1,7 +1,7 @@
 <template>
   <div
     class="row items-center nowrap print-as-page"
-    style="margin-top: 2mm; margin-left: 2mm;"
+    style="margin-top: 2mm; margin-left: 4mm;"
   >
     <div class="col-auto">
       <qr-code :value="page.bracelet_id" :size="80" level="L"></qr-code>
