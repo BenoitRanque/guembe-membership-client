@@ -15,9 +15,13 @@
             </q-tooltip>
           </q-btn>
 
+          Previsualizar Impresion
+
+          <q-space />
           <q-btn
+            unelevated
+            color="blue"
             dense
-            flat
             icon="mdi-printer"
             @click="print"
           >
@@ -28,7 +32,7 @@
             </q-tooltip>
           </q-btn>
 
-          <q-space />
+          <q-separator class="q-mx-sm" vertical></q-separator>
 
           <q-btn dense flat icon="mdi-close" @click="confirmCancel">
             <q-tooltip>Cerrar</q-tooltip>
@@ -94,10 +98,11 @@
 import DefaultPrintingTemplate from './template/Default'
 import MembershipPrintingTemplate from './template/Membership'
 import BraceletPrintingTemplate from './template/Bracelet'
+import ReportPrintingTemplate from './template/Report'
 
 export default {
   name: 'Printing',
-  components: { MembershipPrintingTemplate, BraceletPrintingTemplate, DefaultPrintingTemplate },
+  components: { MembershipPrintingTemplate, BraceletPrintingTemplate, DefaultPrintingTemplate, ReportPrintingTemplate },
   data () {
     return {
       printerOptions: {

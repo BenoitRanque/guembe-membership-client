@@ -26,7 +26,7 @@
             v-model="showUserSessionDropdown"
             flat stretch
             auto-close
-            label="Session Iniciada"
+            label="Sesion Iniciada"
           >
             <q-list>
               <q-item>
@@ -59,7 +59,7 @@
           </q-btn-dropdown>
         </template>
         <template v-else>
-          <q-btn-dropdown flat stretch label="Iniciar Session" v-model="showLoginDropdown">
+          <q-btn-dropdown flat stretch label="Iniciar Sesion" v-model="showLoginDropdown">
             <user-authentication></user-authentication>
           </q-btn-dropdown>
         </template>
@@ -92,7 +92,7 @@
             <q-item-label caption>Administrar membresias</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable to="/admittance/bracelets" v-if="isAuthorized(['admittance_bracelet_print', 'admittance_bracelet_view'])">
+        <q-item clickable to="/admittance" v-if="isAuthorized(['admittance_bracelet_print', 'admittance_bracelet_view'])">
           <q-item-section avatar>
             <q-avatar icon="mdi-qrcode"></q-avatar>
           </q-item-section>

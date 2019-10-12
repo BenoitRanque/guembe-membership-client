@@ -6,7 +6,7 @@
           Bienvenido
         </div>
         <div class="text-subtitle2 text-center">
-          Por favor inicia session
+          Por favor inicia sesion
         </div>
       </q-card-section>
       <q-card-section>

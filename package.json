@@ -16,6 +16,7 @@
     "cropperjs": "^1.5.5",
     "qrcode.vue": "^1.6.3",
     "quasar": "^1.0.0",
+    "vue-qrcode-reader": "^2.1.0",
     "vue-web-cam": "^1.6.0"
   },
   "devDependencies": {
