@@ -13,11 +13,11 @@ const routes = [
           { path: '', redirect: 'cards' },
           { path: 'contracts', component: () => import('pages/membership/Contracts.vue') },
           // { path: 'contract/:contractId', component: () => import('pages/membership/Contract.vue') },
-          // { path: 'contract/:contractId/cards', component: () => import('pages/membership/Cards.vue') },
-          // { path: 'contract/:contractId/uses', component: () => import('pages/membership/Uses.vue') },
+          { path: 'contract/:contractId/cards', props: true, component: () => import('pages/membership/Cards.vue') },
+          { path: 'contract/:contractId/uses', props: true, component: () => import('pages/membership/Uses.vue') },
           { path: 'cards', component: () => import('pages/membership/Cards.vue') },
           // { path: 'card/:cardId', component: () => import('pages/membership/Card.vue') },
-          // { path: 'card/:cardId/uses', component: () => import('pages/membership/Uses.vue') },
+          { path: 'card/:cardId/uses', props: true, component: () => import('pages/membership/Uses.vue') },
           { path: 'uses', component: () => import('pages/membership/Uses.vue') }
         ]
       },

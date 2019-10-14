@@ -13,12 +13,28 @@
       @request="loadContracts"
   >
     <template v-slot:top-right>
-      <create-contract color="accent" class="q-mr-sm" v-if="isAuthorized('membership_print')" label="Crear"></create-contract>
+      <create-contract color="accent" class="q-mr-sm" v-if="isAuthorized('membership_print')" @created="$event => $router.push(`/membership/contract/${$event.contract_id}/cards`)" label="Crear"></create-contract>
       <q-input dense outlined debounce="300" v-model="filter" placeholder="Buscar">
         <template v-slot:prepend>
           <q-icon name="mdi-magnify" />
         </template>
       </q-input>
+    </template>
+    <template v-slot:body-cell-uses="props">
+      <q-td :props="props">
+        <q-btn
+          size="sm"
+          dense
+          flat
+          @click="$router.push(`/membership/contract/${props.row.contract_id}/uses`)"
+        >
+          <div class="row no-wrap">
+            {{props.row.cards.reduce((uses, card) => uses + card.uses.aggregate.count, 0)}}
+            <q-icon name="mdi-open-in-new"></q-icon>
+          </div>
+          <q-tooltip>Ver usos</q-tooltip>
+        </q-btn>
+      </q-td>
     </template>
   </q-table>
 </template>
@@ -80,6 +96,12 @@ export default {
           }, {})).map(([type, amount]) => `${type}: ${amount}`).join(', ')
         },
         {
+          name: 'uses',
+          label: 'Usos',
+          align: 'left',
+          field: row => row.cards.reduce((uses, card) => uses + card.uses.aggregate.count, 0)
+        },
+        {
           name: 'sign_date',
           label: 'Fecha Contrato',
           align: 'left',
@@ -137,9 +159,11 @@ export default {
               type {
                 description
               }
-              image
-              name
-              document
+              uses: uses_aggregate {
+                aggregate {
+                  count
+                }
+              }
             }
           }
         }

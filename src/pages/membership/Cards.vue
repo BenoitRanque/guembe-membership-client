@@ -27,8 +27,7 @@
     </template>
     <template v-slot:item="props">
       <div
-        class="q-pa-sm col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 grid-style-transition"
-        :style="props.selected ? 'transform: scale(0.95);' : ''"
+        class="q-pa-sm col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
       >
         <q-card
           style="font-size: 0; overflow: hidden;"
@@ -42,6 +41,57 @@
             :valid-to="props.row.contract.end_date"
           ></membership-card>
           <div v-if="!isValid(props.row.contract)" class="bg-black absolute absolute-top-left absolute-bottom-right" style="opacity: 0.3"></div>
+          <div class="absolute absolute-top-right q-mt-sm q-mr-sm" v-if="isAuthorized('membership_print') && props.row.prints.aggregate.count === 0" >
+            <q-btn color="blue" icon="mdi-printer" dense @click="print(props.row)">
+              <q-tooltip>
+                Impresion
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <q-menu context-menu>
+            <q-list dense>
+              <!-- <q-item :to="`/membership/card/${props.row.card_id}`">
+                <q-item-section>
+                  <q-item-label>
+                    Ver Detalles
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-icon name="mdi-account-card-details"></q-icon>
+                </q-item-section>
+              </q-item> -->
+              <q-item :to="`/membership/card/${props.row.card_id}/uses`">
+                <q-item-section>
+                  <q-item-label>
+                    Ver Usos
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-icon name="mdi-login"></q-icon>
+                </q-item-section>
+              </q-item>
+              <q-item v-if="isAuthorized('membership_print') && props.row.prints.aggregate.count === 0" clickable @click="print(props.row)">
+                <q-item-section>
+                  <q-item-label>
+                    Impresion
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-icon name="mdi-printer"></q-icon>
+                </q-item-section>
+              </q-item>
+              <q-item v-else-if="isAuthorized('membership_reprint')" clickable @click="reprint(props.row)">
+                <q-item-section>
+                  <q-item-label>
+                    Reimpresion
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-icon name="mdi-printer"></q-icon>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
         </q-card>
       </div>
     </template>
@@ -54,11 +104,15 @@ import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 const { extractDate, isBetweenDates, formatDate } = date
 
-// const UUID_V4_REGEX = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-
 export default {
   name: 'Membership',
   components: { MembershipCard },
+  props: {
+    contractId: {
+      type: String,
+      default: null
+    }
+  },
   data () {
     return {
       splitter: 70,
@@ -84,31 +138,48 @@ export default {
     isValid ({ start_date, end_date }) {
       return isBetweenDates(new Date(), extractDate(start_date, 'YYYY-MM-DD'), extractDate(end_date, 'YYYY-MM-DD'))
     },
-    async print (card_id, reprint = false, comment = null) {
+    print (card) {
+      this.$q.dialog({
+        title: 'Impresion',
+        message: 'Impresion inicial. Esta accion sera registrada',
+        cancel: true,
+        ok: {
+          color: 'blue',
+          unelevated: true,
+          icon: 'mdi-printer',
+          label: 'Imprimir'
+        }
+      }).onOk(() => this.registerPrint(card))
+    },
+    reprint (card) {
+      this.$q.dialog({
+        title: 'Re-Impresion',
+        message: 'Para re-imprimir membresia, debera proporcionar un motivo. Esta accion sera registrada',
+        cancel: true,
+        ok: {
+          color: 'blue',
+          unelevated: true,
+          icon: 'mdi-printer',
+          label: 'Imprimir'
+        },
+        prompt: {
+          type: 'text',
+          model: ''
+        }
+      }).onOk(comment => this.registerPrint(card, true, comment))
+    },
+    async registerPrint (card, reprint = false, comment = null) {
       const query = /* GraphQL */`
         mutation ($objects: [membership_print_insert_input!]!) {
           insert: insert_membership_print (objects: $objects) {
             affected_rows
-            print: returning {
-              card {
-                card_id
-                type_id
-                name
-                document
-                image
-                contract {
-                  end_date
-                }
-              }
-            }
           }
         }
       `
-      // TODO: get data in function before actual creation of record
 
       const variables = {
         objects: {
-          card_id
+          card_id: card.card_id
         }
       }
 
@@ -119,9 +190,13 @@ export default {
       try {
         this.loading = true
 
-        const { insert: { print: { card } } } = await this.$gql({ query, variables, role: reprint ? 'membership_reprint' : 'membership_reprint' })
+        await this.$gql({ query, variables, role: reprint ? 'membership_reprint' : 'membership_print' })
 
         this.$root.$emit('PRINT', { preview: true, template: 'membership', pages: { ...card, validTo: card.contract.end_date } })
+
+        this.$nextTick(() => {
+          this.loadMemberships({ pagination: this.pagination, filter: this.filter })
+        })
       } catch (error) {
         this.$gql.handleError(error)
       } finally {
@@ -162,6 +237,10 @@ export default {
       if (this.onlyValid) {
         where.contract.start_date = { _lte: formatDate(new Date(), 'YYYY-MM-DD') }
         where.contract.end_date = { _gte: formatDate(new Date(), 'YYYY-MM-DD') }
+      }
+
+      if (this.contractId) {
+        where.contract.contract_id = { _eq: this.contractId }
       }
 
       if (filter.length) {

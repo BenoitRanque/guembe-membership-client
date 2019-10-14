@@ -2,7 +2,7 @@
   <q-table
       flat
       class="q-ma-sm"
-      title="Usos"
+      :title="title"
       :data="uses"
       :columns="columns"
       row-key="use_id"
@@ -13,7 +13,7 @@
       @request="loadUses"
   >
     <template v-slot:top-right>
-      <register-use color="primary" @update="loadUses({ pagination, filter: '' })" v-if="isAuthorized('membership_use')" class="q-mr-sm" label="Registrar Uso"></register-use>
+      <register-use color="primary" @update="loadUses({ pagination, filter })" v-if="isAuthorized('membership_use')" class="q-mr-sm" label="Registrar Uso"></register-use>
       <q-btn color="blue" icon="mdi-printer" class="q-mr-sm" label="Reporte" @click="report.showDialog = true">
         <q-dialog v-model="report.showDialog" :persistent="report.loading">
           <q-card>
@@ -47,7 +47,7 @@
 
     <template v-slot:body-cell-preview="props">
       <q-td :props="props">
-        <div class="text-left shadow-6 cursor-pointer" style="width: 80px; font-size: 0;">
+        <div class="text-left shadow-1 cursor-pointer" style="width: 80px; font-size: 0;">
           <membership-card
             :image="props.row.card.image"
             :type-id="props.row.card.type_id"
@@ -80,6 +80,16 @@ const { extractDate, formatDate } = date
 export default {
   name: 'Uses',
   components: { RegisterUse, MembershipCard, DateInput },
+  props: {
+    cardId: {
+      type: String,
+      default: null
+    },
+    contractId: {
+      type: String,
+      default: null
+    }
+  },
   data () {
     return {
       loading: false,
@@ -147,7 +157,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['isAuthorized'])
+    ...mapGetters('auth', ['isAuthorized']),
+    title () {
+      if (this.contractId) {
+        return 'Usos de tarjetas de contrato especifico'
+      }
+      if (this.cardId) {
+        return 'Usos de tarjeta especifica'
+      }
+      return 'Usos de tarjetas'
+    }
   },
   methods: {
     async loadUses ({ pagination, filter }) {
@@ -182,19 +201,32 @@ export default {
           }
         }
       `
+
+      const where = {}
+
+      if (filter.length) {
+        where._or = [
+          { card: { name: { _ilike: `%${filter}%` } } },
+          { card: { document: { _ilike: `%${filter}%` } } },
+          { card: { contract: { business_name: { _ilike: `%${filter}%` } } } },
+          { card: { contract: { tax_identification_number: { _ilike: `%${filter}%` } } } },
+          { card: { contract: { client: { name: { _ilike: `%${filter}%` } } } } },
+          { card: { contract: { client: { phone: { _ilike: `%${filter}%` } } } } },
+          { card: { contract: { client: { email: { _ilike: `%${filter}%` } } } } },
+          { card: { contract: { client: { address: { _ilike: `%${filter}%` } } } } }
+        ]
+      }
+
+      if (this.cardId) {
+        where.card_id = { _eq: this.cardId }
+      }
+
+      if (this.contractId) {
+        where.card = { contract_id: { _eq: this.contractId } }
+      }
+
       const variables = {
-        where: filter.length ? {
-          _or: [
-            { card: { name: { _ilike: `%${filter}%` } } },
-            { card: { document: { _ilike: `%${filter}%` } } },
-            { card: { contract: { business_name: { _ilike: `%${filter}%` } } } },
-            { card: { contract: { tax_identification_number: { _ilike: `%${filter}%` } } } },
-            { card: { contract: { client: { name: { _ilike: `%${filter}%` } } } } },
-            { card: { contract: { client: { phone: { _ilike: `%${filter}%` } } } } },
-            { card: { contract: { client: { email: { _ilike: `%${filter}%` } } } } },
-            { card: { contract: { client: { address: { _ilike: `%${filter}%` } } } } }
-          ]
-        } : {},
+        where,
         limit: pagination.rowsPerPage,
         offset: pagination.rowsPerPage * (pagination.page - 1),
         order_by: [
@@ -220,52 +252,43 @@ export default {
       }
     },
     async printReport () {
-      // const query = /* GraphQL */`
-      //   query ($where: membership_use_bool_exp! $order_by: [membership_use_order_by!]) {
-      //     pages: membership_use (where: $where order_by: $order_by) {
-      //       card_id
-      //       date
-      //       created_at
-      //       card {
-      //         type {
-      //           description
-      //         }
-      //         name
-      //         document
-      //       }
-      //     }
-      //   }
-      // `
+      const query = /* GraphQL */`
+        query ($where: membership_use_bool_exp! $order_by: [membership_use_order_by!]) {
+          pages: membership_use (where: $where order_by: $order_by) {
+            card_id
+            date
+            created_at
+            created_by_user {
+              username
+              name
+            }
+            card {
+              type {
+                description
+              }
+              name
+              document
+            }
+          }
+        }
+      `
 
-      // const variables = {
-      //   where: {
-      //     date: {
-      //       _gte: this.report.fromDate,
-      //       _lte: this.report.toDate
-      //     }
-      //   },
-      //   order_by: {
-      //     created_at: 'asc'
-      //   }
-      // }
+      const variables = {
+        where: {
+          date: {
+            _gte: this.report.fromDate,
+            _lte: this.report.toDate
+          }
+        },
+        order_by: {
+          created_at: 'asc'
+        }
+      }
 
       try {
         this.report.loading = true
 
-        // const { pages } = await this.$gql({ query, variables, role: ['membership_use', 'membership_view'].find(this.isAuthorized) })
-        const pages = [
-          {
-            card: {
-              type: {
-                description: 'Doble'
-              },
-              name: 'Benoit Ranque',
-              document: '123456'
-            },
-            date: '2019-10-12',
-            created_at: new Date().toISOString()
-          }
-        ]
+        const { pages } = await this.$gql({ query, variables, role: ['membership_use', 'membership_view'].find(this.isAuthorized) })
 
         if (!pages.length) {
           this.$q.notify({ color: 'info', icon: 'mdi-information', message: 'No existen registro de usos en esas fechas' })
@@ -280,9 +303,10 @@ export default {
                 'Nombre',
                 'Documento',
                 'Fecha',
-                'Hora'
+                'Hora',
+                'Usuario'
               ],
-              rows: pages.map(({ card: { type: { description }, name, document }, date, created_at }) => [description, name, document, date, formatDate(created_at, 'HH:mm')])
+              rows: pages.map(({ card: { type: { description }, name, document }, date, created_at, created_by_user: { username, name: userFullName } }) => [description, name, document, date, formatDate(created_at, 'HH:mm'), `${userFullName} (${username})`])
             }
           })
         }
