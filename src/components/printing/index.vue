@@ -3,7 +3,8 @@
     <q-dialog v-model="preview.show" persistent>
       <q-card>
         <q-bar>
-          <q-btn
+          <!-- disabled for now. choosing printer does not currently work -->
+          <!-- <q-btn
             v-if="$q.platform.is.electron"
             dense
             flat
@@ -13,7 +14,7 @@
             <q-tooltip>
               Configuracion de Impresora
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
 
           Previsualizar Impresion
 
@@ -178,8 +179,9 @@ export default {
         const contents = remote.getCurrentWebContents()
         contents.print({
           silent: this.config.silent,
-          printBackground: true,
-          deviceName: this.printerOptions.printer
+          printBackground: true
+          // does not work in current electron versions
+          // deviceName: this.printerOptions.printer
         }, (success) => {
           if (this.preview.show) this.preview.show = false
           if (!success) {
