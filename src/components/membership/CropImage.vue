@@ -43,7 +43,7 @@ export default {
       })
     },
     confirm () {
-      this.$emit('image', this.cropper.getCroppedCanvas({ width: 200, height: 200 }).toDataURL('image/jpg'))
+      this.$emit('image', this.cropper.getCroppedCanvas({ width: 300, height: 300 }).toDataURL('image/jpg'))
     }
   },
   mounted () {
