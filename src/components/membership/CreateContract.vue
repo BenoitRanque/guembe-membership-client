@@ -234,7 +234,7 @@ export default {
         mutation CreateContract ($objects: [membership_contract_insert_input!]!) {
           insert: insert_membership_contract (objects: $objects) {
             affected_rows
-            contract: returning {
+            contracts: returning {
               contract_id
             }
           }
