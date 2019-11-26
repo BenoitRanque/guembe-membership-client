@@ -236,17 +236,6 @@ export default {
             affected_rows
             contract: returning {
               contract_id
-              contract_number
-              sign_date
-              start_date
-              end_date
-              cards {
-                card_id
-                type_id
-                name
-                document
-                image
-              }
             }
           }
         }
@@ -273,13 +262,13 @@ export default {
       try {
         this.loading = true
 
-        const { insert: { contract: [ { end_date: validTo, cards } ] } } = await this.$gql({ query, variables, role: 'membership_print' })
+        const { insert: { contracts: [ contract ] } } = await this.$gql({ query, variables, role: 'membership_print' })
 
         this.$q.notify({ icon: 'mdi-check', color: 'positive', message: 'Contrato de membresias registrado exitosamente' })
 
-        this.$root.$emit('PRINT', { preview: true, template: 'membership', pages: cards.map(card => ({ ...card, validTo })) })
-
         this.show = false
+
+        this.$nextTick(() => this.$emit('created', contract))
       } catch (error) {
         this.$gql.handleError(error)
       }
