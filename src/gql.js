@@ -4,7 +4,7 @@ import store from 'src/store'
 
 const api = axios.create({
   baseURL: `http://${process.env.DEV ? '192.168.0.202' : 'app.guembe.ti'}:6060/v1/graphql`,
-  timeout: 15000,
+  timeout: 30000,
   withCredentials: true
 })
 
