@@ -36,6 +36,22 @@
         </q-btn>
       </q-td>
     </template>
+    <template v-slot:body-cell-cards="props">
+      <q-td :props="props">
+        <q-btn
+          size="sm"
+          dense
+          flat
+          @click="$router.push(`/membership/contract/${props.row.contract_id}/cards`)"
+        >
+          <div class="row no-wrap">
+            {{props.row.cards.length}}
+            <q-icon name="mdi-open-in-new"></q-icon>
+          </div>
+          <q-tooltip>Ver Tarjetas</q-tooltip>
+        </q-btn>
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -96,10 +112,14 @@ export default {
           }, {})).map(([type, amount]) => `${type}: ${amount}`).join(', ')
         },
         {
+          name: 'cards',
+          label: 'Tarjetas',
+          align: 'left'
+        },
+        {
           name: 'uses',
           label: 'Usos',
-          align: 'left',
-          field: row => row.cards.reduce((uses, card) => uses + card.uses.aggregate.count, 0)
+          align: 'left'
         },
         {
           name: 'sign_date',
