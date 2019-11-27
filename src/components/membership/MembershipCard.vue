@@ -31,7 +31,8 @@ const { formatDate, extractDate } = date
 const backgroundMap = {
   'INDIVIDUAL': 'membership_individual.png',
   'DUO': 'membership_duo.png',
-  'FAMILY': 'membership_family.png'
+  'FAMILY': 'membership_family.png',
+  'CHILD': 'membership_child.png'
 }
 
 export default {

@@ -139,21 +139,23 @@ import MembershipCard from './MembershipCard'
 const membershipTypes = [
   {
     label: 'Membresia Individual',
-    background: 'membership_individual.png',
     value: 'INDIVIDUAL',
     type_id: 'INDIVIDUAL'
   },
   {
     label: 'Membresia Duo',
-    background: 'membership_duo.png',
     value: 'DUO',
     type_id: 'DUO'
   },
   {
     label: 'Membresia Familiar',
-    background: 'membership_family.png',
     value: 'FAMILY',
     type_id: 'FAMILY'
+  },
+  {
+    label: 'Membresia Infantil',
+    value: 'CHILD',
+    type_id: 'CHILD'
   }
 ]
 export default {
