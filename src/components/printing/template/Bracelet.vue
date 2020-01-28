@@ -4,12 +4,12 @@
     style="margin-top: 2mm; margin-left: 2mm;"
   >
     <div class="col-auto">
-      <qr-code :value="page.bracelet_id" :size="80" level="L"></qr-code>
+      <img style="height: 70px" src="statics/admittance/isologo.png" alt="">
     </div>
     <div class="col-auto q-py-xs">
       <div class="column">
         <div class="col text-center">
-          <img class="q-ml-md q-mr-sm" src="statics/admittance/textlogo.png" style="height: 35px" alt="">
+          <img class="q-ml-sm q-mr-md" src="statics/admittance/textlogo.png" style="height: 35px" alt="">
         </div>
         <div class="col text-bold row">
           <div class="q-pr-xs text-right col">
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="col-auto">
-      <img style="height: 70px" src="statics/admittance/isologo.png" alt="">
+      <qr-code :value="page.bracelet_id" :size="80" level="L"></qr-code>
     </div>
   </div>
 </template>
